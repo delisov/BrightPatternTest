@@ -23,6 +23,7 @@ std::string ThreadRepo::printData() {
 
 	std::stringstream ss;
 	ss << std::format("|{: ^20}|{: ^40}|{: ^40}|\n", "thread id", "name", "activity");
+	ss << std::format("|{:-^20}|{:-^40}|{:-^40}|\n", "", "", "");
 
 	for (auto it = mThreads.begin(); it != mThreads.end(); ++it) {
 		ss << std::format("|{: ^20}|{: ^40}|{: ^40}|\n", it->first, it->second.name, it->second.activity);

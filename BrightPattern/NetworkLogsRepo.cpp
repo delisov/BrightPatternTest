@@ -11,11 +11,12 @@ std::string NetworkLogsRepo::printData()
 	clearOldRecords();
 
 	std::stringstream ss;
-	ss << std::format("|{: ^10}|{: ^16}|{: ^20}|{: ^20}|\n", "id", "timetamp", "work time, msec", "response time, msec");
+	ss << std::format("|{: ^20}|{: ^16}|{: ^20}|{: ^20}|\n", "connection id", "timetamp", "workload, msec", "response time, msec");
+	ss << std::format("|{:-^20}|{:-^16}|{:-^20}|{:-^20}|\n", "", "", "", "");
 
 	for (auto it = mRecords.begin(); it != mRecords.end(); ++it) {
 		std::string replyMsec = it->second.isReplied ? std::to_string(it->second.replyMsec) : "-";
-		ss << std::format("|{: ^10}|{: ^16}|{: ^20}|{: ^20}|\n", it->first, it->second.timestamp, it->second.isLong ? LONG_WORK_MSEC : 0, replyMsec);
+		ss << std::format("|{: ^20}|{: ^16}|{: ^20}|{: ^20}|\n", it->first, it->second.timestamp, it->second.isLong ? LONG_WORK_MSEC : 0, replyMsec);
 	}
 
 	return ss.str();

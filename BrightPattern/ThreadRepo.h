@@ -28,7 +28,7 @@ private:
 		std::string activity;
 	};
 
-	std::map<int, ThreadInfo> mThreads;
+	std::map<size_t, ThreadInfo> mThreads;
 	std::mutex mMutex;
 	ThreadRepo() {}
 };

@@ -92,8 +92,6 @@ void main()
 	rp->start();
 	cp->startPrintLogs();
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(SELECT_MSEC));
-
 	while (true)
 	{
 		std::list<NetworkActivity> act = nl->Select(SELECT_MSEC);
