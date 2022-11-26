@@ -4,6 +4,8 @@ This is a simulation of a network server that would accept requests and process 
 
 A lot of decisions in this project are exactly as I would do in a larger project
 
+Some features used are only available in C++20
+
 ## Important decisions:
 - Requests are processed with the special `RequestProcessor` class
 - `RequestProcessor` is done with a threadpool
