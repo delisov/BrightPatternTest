@@ -13,14 +13,14 @@ public:
 	ThreadRepo(ThreadRepo const&) = delete;
 	void operator=(ThreadRepo const&) = delete;
 
-	static std::shared_ptr<ThreadRepo> instance();
+	[[nodiscard]] static std::shared_ptr<ThreadRepo> instance();
 
 	void addThread(std::string name, std::string activity);
 	void removeThread();
 
 	// IPrinterDataSource
-	std::string name();
-	std::string printData();
+	[[nodiscard]] std::string name();
+	[[nodiscard]] std::string printData();
 
 private:
 	struct ThreadInfo {

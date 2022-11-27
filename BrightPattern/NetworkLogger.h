@@ -10,7 +10,7 @@ public:
 	NetworkLogger(std::weak_ptr<INetwork> network, std::weak_ptr<NetworkLogsRepo> logsRepo): mNetwork(network), mNetworkLogsRepo(logsRepo) {}
 
 	void addActivity(NetworkActivity netActivity);
-	std::list<NetworkActivity> Select(unsigned timeout);
+	[[maybe_unused]] std::list<NetworkActivity> Select(unsigned timeout);
 	void sendReply(int connection, std::shared_ptr<Reply>);
 	bool shouldExit() const;
 

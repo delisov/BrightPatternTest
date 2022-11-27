@@ -11,9 +11,9 @@ public:
 		newRequest
 	};
 
-	Activity activity() const; // what has happened
-	int connection() const; // socket handle
-	std::shared_ptr<Request> request() const;
+	[[nodiscard]] Activity activity() const; // what has happened
+	[[nodiscard]] int connection() const; // socket handle
+	[[nodiscard]] std::shared_ptr<Request> request() const;
 
 	NetworkActivity(int, Activity, std::shared_ptr<Request> request);
 

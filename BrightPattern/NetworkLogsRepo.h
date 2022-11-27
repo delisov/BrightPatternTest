@@ -12,8 +12,8 @@ class NetworkLogsRepo : public IPrinterDataSource {
 public:
 	void addActivity(NetworkActivity netActivity);
 	void addConnectionReply(int connection);
-	std::string name() { return "Network activity"; }
-	std::string printData();
+	[[nodiscard]] std::string name() { return "Network activity"; }
+	[[nodiscard]] std::string printData();
 
 private:
 	struct OutputStats {

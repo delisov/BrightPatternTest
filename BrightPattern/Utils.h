@@ -8,10 +8,10 @@ class Utils
 public:
 	static void waitRandMsec(int minMsec, int maxMsec);
 
-	static bool getRandomBool();
+	[[nodiscard]] static bool getRandomBool();
 
-	static long long timestamp();
+	[[nodiscard]] static long long timestamp();
 
-	static size_t threadId();
+	[[nodiscard]] static size_t threadId();
 };
 
