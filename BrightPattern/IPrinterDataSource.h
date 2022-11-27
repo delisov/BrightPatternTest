@@ -3,6 +3,6 @@
 
 class IPrinterDataSource {
 public:
-	virtual std::string name() = 0;
-	virtual std::string printData() = 0;
+	[[nodiscard]] virtual std::string name() = 0;
+	[[nodiscard]] virtual std::string printData() = 0;
 };
