@@ -11,7 +11,6 @@ public:
 
 	void start();
 	void stop();
-	bool isActive() const;
 
 private:
 	std::unique_ptr<std::thread> mThread;
