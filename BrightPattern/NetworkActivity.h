@@ -4,7 +4,7 @@
 class NetworkActivity
 {
 public:
-	enum Activity
+	enum class Activity
 	{
 		newConnection,
 		closeConnection,

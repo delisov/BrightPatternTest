@@ -107,7 +107,7 @@ void main()
 		for (auto it = act.begin(); it != act.end(); ++it)
 		{
 			NetworkActivity& a = *it;
-			if (a.activity() == NetworkActivity::newRequest)
+			if (a.activity() == NetworkActivity::Activity::newRequest)
 			{
 				rp->processRequest(a, nl);
 			}
