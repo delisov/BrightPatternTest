@@ -14,12 +14,13 @@ void Network::addActivity(NetworkActivity netActivity) {
 /// </summary>
 
 std::list<NetworkActivity> Network::Select(unsigned timeout) {
-	std::unique_lock<std::mutex> guard(mMutex);
 	if (mActivityBuffer.empty()) {
-		guard.unlock();
 		std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
-		guard.lock();
 	}
+	if (mActivityBuffer.empty()) {
+		return std::list<NetworkActivity>();
+	}
+	std::scoped_lock<std::mutex> guard(mMutex);
 	auto recentActivity = move(mActivityBuffer);
 	return recentActivity;
 }
