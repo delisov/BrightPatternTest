@@ -14,8 +14,6 @@ public:
     void processRequest(NetworkActivity a, std::weak_ptr<INetwork> network);
     void start();
     void stop();
-    void initialize();
-    void uninitialize();
 
 private:
     std::atomic<bool> mIsRunning = false;
@@ -24,8 +22,9 @@ private:
     std::mutex mMutex;
     std::unique_ptr<std::thread[]> mThreads;
     std::queue<std::pair<NetworkActivity, std::weak_ptr<INetwork>>> mRequests;
-
     std::condition_variable sRequestAvailableCv = {};
 
     void worker();
+    void initialize();
+    void uninitialize();
 };
