@@ -21,6 +21,7 @@ void RequestGenerator::start() {
 
 void RequestGenerator::stop() {
 	mIsActive = false;
+	mThread->join();
 }
 
 void RequestGenerator::work()
