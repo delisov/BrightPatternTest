@@ -11,10 +11,14 @@ const int MIN_MSEC_WAIT_BETWEEN_REQUESTS = 100;
 const int MAX_MSEC_WAIT_BETWEEN_REQUESTS = 1000;
 
 /// <summary>
+/// A parameter for the Requests Generator
+/// </summary>
+const int REQUESTS_TO_GENERATE = 50;
+
+/// <summary>
 /// A parameter for the main loop, timeout for network select
 /// </summary>
 const int SELECT_MSEC = 1000;
-
 
 /// <summary>
 /// A parameter for the main loop, how often to update the info in the console

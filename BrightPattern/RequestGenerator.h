@@ -7,7 +7,8 @@
 class RequestGenerator
 {
 public:
-	RequestGenerator(std::weak_ptr<INetwork> net, unsigned int minMsecWait, unsigned int maxMsecWait);
+	RequestGenerator(std::weak_ptr<INetwork> net, unsigned int minMsecWait, 
+		             unsigned int maxMsecWait, unsigned int maxRequests);
 
 	void start();
 	void stop();
@@ -18,6 +19,7 @@ private:
 	std::atomic<bool> mIsActive;
 	unsigned int mMinMsecWait;
 	unsigned int mMaxMsecWait;
+	unsigned int mMaxRequests;
 
 	unsigned int mConnectionCounter = 0;
 	void work();

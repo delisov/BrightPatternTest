@@ -92,7 +92,8 @@ void main()
 	auto rg = std::make_shared<RequestGenerator>(
 		nl, 
 		MIN_MSEC_WAIT_BETWEEN_REQUESTS, 
-		MAX_MSEC_WAIT_BETWEEN_REQUESTS);
+		MAX_MSEC_WAIT_BETWEEN_REQUESTS,
+		REQUESTS_TO_GENERATE);
 	auto rp = std::make_shared<RequestProcessor>(THREADS_COUNT);
 
 	rg->start();
@@ -113,12 +114,12 @@ void main()
 		}
 	}
 
+	rg->stop();
+	rp->stop();
 	cp->stop();
 
 	std::cout << "No new requests in the last " << SELECT_MSEC << "ms. Stopping." << std::endl;
 
-	rg->stop();
-	rp->stop();
 
 	pause();
 }
