@@ -17,6 +17,7 @@ void RequestProcessor::start() {
 
 void RequestProcessor::stop() {
     mIsRunning = false;
+    sRequestAvailableCv.notify_all();
     uninitialize();
 }
 
@@ -48,6 +49,11 @@ void RequestProcessor::worker() {
         ThreadRepo::instance()->addThread("Request processor", "Awaiting requests");
         std::unique_lock<std::mutex> guard(mMutex);
         sRequestAvailableCv.wait(guard, [this] { return !mRequests.empty() || !mIsRunning; });
+
+        if (!mIsRunning) {
+            break;
+        }
+
         auto task = std::move(mRequests.front());
         mRequests.pop();
         guard.unlock();
