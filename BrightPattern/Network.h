@@ -17,7 +17,7 @@ public:
 	/// <summary>
 	///	Removes activity from the buffer and returns it
 	/// </summary>
-	std::list<NetworkActivity> Select(unsigned timeout);
+	[[maybe_unused]] std::list<NetworkActivity> Select(unsigned timeout);
 
 	/// <summary>
 	/// Sending reply to a request. no need to delete the reply after that
@@ -28,7 +28,7 @@ public:
 	/// Returns true if application should exit.
 	/// We assume that it should exit if the buffer is currently empty
 	/// </summary>
-	bool shouldExit() const;
+	[[nodiscard]] bool shouldExit() const;
 
 private:
 	std::list<NetworkActivity> mActivityBuffer;
