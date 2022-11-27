@@ -8,8 +8,8 @@ class ConsolePrinter
 {
 public:
 	void addPrinterSource(std::weak_ptr<IPrinterDataSource> source);
-	void startPrintLogs();
-	void stopPrintLogs();
+	void start();
+	void stop();
 private:
 	std::vector<std::weak_ptr<IPrinterDataSource>> mDataSources;
 

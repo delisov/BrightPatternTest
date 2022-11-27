@@ -71,6 +71,11 @@
 #include "NetworkLogger.h"
 #include "ConsolePrinter.h"
 
+[[maybe_unused]] int pause() {
+	fflush(stdin);
+	return getchar();
+}
+
 void main()
 {
 	std::cout << "This is a simulation of network activity";
@@ -79,23 +84,25 @@ void main()
 	auto nlr = std::make_shared<NetworkLogsRepo>();
 	auto tr = ThreadRepo::instance();
 	auto nl = std::make_shared<NetworkLogger>(nw, nlr);
+
 	auto cp = std::make_shared<ConsolePrinter>();
+	cp->addPrinterSource(nlr);
+	cp->addPrinterSource(tr);
+
 	auto rg = std::make_shared<RequestGenerator>(
 		nl, 
 		MIN_MSEC_WAIT_BETWEEN_REQUESTS, 
 		MAX_MSEC_WAIT_BETWEEN_REQUESTS);
 	auto rp = std::make_shared<RequestProcessor>(THREADS_COUNT);
 
-	cp->addPrinterSource(nlr);
-	cp->addPrinterSource(tr);
 	rg->start();
 	rp->start();
-	cp->startPrintLogs();
+	cp->start();
 
-	while (true)
+	std::list<NetworkActivity> act;
+
+	while (!(act = nl->Select(SELECT_MSEC)).empty())
 	{
-		std::list<NetworkActivity> act = nl->Select(SELECT_MSEC);
-
 		for (auto it = act.begin(); it != act.end(); ++it)
 		{
 			NetworkActivity& a = *it;
@@ -106,9 +113,13 @@ void main()
 		}
 	}
 
-	rg->stop();
+	cp->stop();
 
-	fflush(stdin);
-	getchar();
+	std::cout << "No new requests in the last " << SELECT_MSEC << "ms. Stopping." << std::endl;
+
+	rg->stop();
+	rp->stop();
+
+	pause();
 }
 

@@ -8,17 +8,18 @@ void ConsolePrinter::addPrinterSource(std::weak_ptr<IPrinterDataSource> source) 
 	mDataSources.push_back(source);
 }
 
-void ConsolePrinter::startPrintLogs()
+void ConsolePrinter::start()
 {
 	std::scoped_lock<std::mutex> guard(mMutex);
 	mIsPrintActive = true;
 	mThread = std::make_unique<std::thread>(&ConsolePrinter::printWork, this);
 }
 
-void ConsolePrinter::stopPrintLogs()
+void ConsolePrinter::stop()
 {
 	std::scoped_lock<std::mutex> guard(mMutex);
 	mIsPrintActive = false;
+	mThread->join();
 }
 
 void clear()
@@ -40,12 +41,10 @@ void ConsolePrinter::printWork()
 {
 	ThreadRepo::instance()->addThread("ConsolePrinter", "Printing output");
 
-
 	while (mIsPrintActive) {
 		std::stringstream ss;
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(PRINT_REFRESH_MSEC));
-		clear();
 
 		for (auto it = mDataSources.begin(); it != mDataSources.end(); ++it) {
 			if (auto dataSource = it->lock()) {
@@ -57,9 +56,9 @@ void ConsolePrinter::printWork()
 			}
 		}
 
+		clear();
 		std::cout << ss.str();
 	}
-
 
 	ThreadRepo::instance()->removeThread();
 }
