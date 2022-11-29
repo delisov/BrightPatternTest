@@ -1,6 +1,6 @@
 #include "ThreadRepo.h"
 
-std::string ThreadRepo::name() { return "Threads"; }
+constexpr std::string ThreadRepo::name() { return "Threads"; }
 
 void ThreadRepo::addThread(std::string name, std::string activity) {
 	std::scoped_lock<std::mutex> guard(mMutex);

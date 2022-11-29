@@ -3,7 +3,7 @@
 /// <summary>
 /// A parameter for the Requests Generator
 /// </summary>
-const int MIN_MSEC_WAIT_BETWEEN_REQUESTS = 100;
+const int MIN_MSEC_WAIT_BETWEEN_REQUESTS = 300;
 
 /// <summary>
 /// A parameter for the Requests Generator
@@ -13,7 +13,12 @@ const int MAX_MSEC_WAIT_BETWEEN_REQUESTS = 1000;
 /// <summary>
 /// A parameter for the Requests Generator
 /// </summary>
-const int REQUESTS_TO_GENERATE = 50;
+const int REQUESTS_TO_GENERATE = 500;
+
+/// <summary>
+/// A parameter for the Requests Generator
+/// </summary>
+const int CONNECTION_POOL_SIZE = 30;
 
 /// <summary>
 /// A parameter for the main loop, timeout for network select
@@ -33,7 +38,12 @@ const int LONG_WORK_MSEC = 3000;
 /// <summary>
 /// A parameter for the Request Processor, the concurrency level
 /// </summary>
-const int THREADS_COUNT = 8;
+const int FAST_TASKS_THREADS_COUNT = 1;
+
+/// <summary>
+/// A parameter for the Request Processor, the concurrency level
+/// </summary>
+const int SLOW_TASKS_THREADS_COUNT = 6;
 
 /// <summary>
 /// Number of records to keep in Networks Logs Repo

@@ -15,7 +15,7 @@ public:
 	[[nodiscard]] int connection() const; // socket handle
 	[[nodiscard]] std::shared_ptr<Request> request() const;
 
-	NetworkActivity(int, Activity, std::shared_ptr<Request> request);
+	NetworkActivity(int, Activity, std::shared_ptr<Request> request = nullptr);
 
 private:
 	int mConnection;

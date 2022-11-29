@@ -19,7 +19,7 @@ public:
 	void removeThread();
 
 	// IPrinterDataSource
-	[[nodiscard]] std::string name();
+	[[nodiscard]] constexpr std::string name();
 	[[nodiscard]] std::string printData();
 
 private:

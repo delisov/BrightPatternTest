@@ -70,6 +70,9 @@
 #include "RequestProcessor.h"
 #include "NetworkLogger.h"
 #include "ConsolePrinter.h"
+#include "NetworkThreadSafe.h"
+#include "ConnectionRepo.h"
+
 
 [[maybe_unused]] int pause() {
 	fflush(stdin);
@@ -80,24 +83,29 @@ void main()
 {
 	std::cout << "This is a simulation of network activity";
 
-	auto nw = std::make_shared<Network>();
+	auto cr = std::make_shared<ConnectionRepo>();
+	auto nw = std::make_shared<NetworkThreadSafe>(cr);
 	auto nlr = std::make_shared<NetworkLogsRepo>();
 	auto tr = ThreadRepo::instance();
-	auto nl = std::make_shared<NetworkLogger>(nw, nlr);
+	auto nl = std::make_shared<NetworkLogger>(nw, cr, nlr);
 
 	auto cp = std::make_shared<ConsolePrinter>();
 	cp->addPrinterSource(nlr);
 	cp->addPrinterSource(tr);
+	cp->addPrinterSource(cr);
 
 	auto rg = std::make_shared<RequestGenerator>(
-		nl, 
+		nl,
 		MIN_MSEC_WAIT_BETWEEN_REQUESTS, 
 		MAX_MSEC_WAIT_BETWEEN_REQUESTS,
-		REQUESTS_TO_GENERATE);
-	auto rp = std::make_shared<RequestProcessor>(THREADS_COUNT);
+		REQUESTS_TO_GENERATE,
+		CONNECTION_POOL_SIZE);
+	auto fastRp = std::make_shared<RequestProcessor>(cr, FAST_TASKS_THREADS_COUNT, "Short request processor");
+	auto slowRp = std::make_shared<RequestProcessor>(cr, SLOW_TASKS_THREADS_COUNT, "Long request processor");
 
 	rg->start();
-	rp->start();
+	fastRp->start();
+	slowRp->start();
 	cp->start();
 
 	std::list<NetworkActivity> act;
@@ -107,15 +115,20 @@ void main()
 		for (auto it = act.begin(); it != act.end(); ++it)
 		{
 			NetworkActivity& a = *it;
-			if (a.activity() == NetworkActivity::Activity::newRequest)
-			{
-				rp->processRequest(a, nl);
+
+			if (a.activity() == NetworkActivity::Activity::newRequest) {
+				if (a.request()->islong()) {
+					slowRp->processRequest(a, nl);
+				} else {
+					fastRp->processRequest(a, nl);
+				}
 			}
 		}
 	}
 
 	rg->stop();
-	rp->stop();
+	fastRp->stop();
+	slowRp->stop();
 	cp->stop();
 
 	std::cout << "No new requests in the last " << SELECT_MSEC << "ms. Stopping." << std::endl;

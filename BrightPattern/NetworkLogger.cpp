@@ -1,19 +1,28 @@
 #include "NetworkLogger.h"
 
 void NetworkLogger::addActivity(NetworkActivity netActivity) {
-	mNetworkLogsRepo.lock()->addActivity(netActivity);
-	mNetwork.lock()->addActivity(netActivity);
+    if (netActivity.activity() == NetworkActivity::Activity::newRequest) {
+        int connection = netActivity.connection();
+        auto recipientIdBegin = mConnectionRepo.lock()->getConnection(connection).recipientUuid;
+        mNetworkLogsRepo.lock()->addActivity(netActivity, recipientIdBegin);
+    }
+    else if (netActivity.activity() == NetworkActivity::Activity::closeConnection) {
+        mNetworkLogsRepo.lock()->invalidateRequest(netActivity.connection());
+    }
+    mNetwork.lock()->addActivity(netActivity);
 }
 
 std::list<NetworkActivity> NetworkLogger::Select(unsigned timeout) {
-	return mNetwork.lock()->Select(timeout);
+    auto result = mNetwork.lock()->Select(timeout);
+    return result;
 }
 
 void NetworkLogger::sendReply(int connection, std::shared_ptr<Reply> reply) {
-	mNetworkLogsRepo.lock()->addConnectionReply(connection);
-	mNetwork.lock()->sendReply(connection, reply);
+    auto recipientIdBegin = mConnectionRepo.lock()->getConnection(connection).recipientUuid;
+    mNetworkLogsRepo.lock()->addConnectionReply(connection, recipientIdBegin);
+    mNetwork.lock()->sendReply(connection, reply);
 }
 
 bool NetworkLogger::shouldExit() const {
-	return mNetwork.lock()->shouldExit();
+    return mNetwork.lock()->shouldExit();
 }

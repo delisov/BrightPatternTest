@@ -10,8 +10,12 @@ public:
 
 	[[nodiscard]] static bool getRandomBool();
 
+	[[nodiscard]] static int getRandomInt(int min, int max);
+
 	[[nodiscard]] static long long timestamp();
 
 	[[nodiscard]] static size_t threadId();
+
+	[[nodiscard]] static std::string generate_guid();
 };
 

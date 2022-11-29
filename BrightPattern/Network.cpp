@@ -4,8 +4,20 @@
 /// Put an activity to the buffer
 /// </summary>
 
-void Network::addActivity(NetworkActivity netActivity) {
-	std::scoped_lock<std::mutex> guard(mMutex);
+void Network::addActivity(NetworkActivity netActivity) {switch (auto act = netActivity.activity()) {
+	case NetworkActivity::Activity::newConnection:
+		mConnectionRepo.lock()->addConnection(netActivity.connection());
+		break;
+	case NetworkActivity::Activity::closeConnection:
+		mConnectionRepo.lock()->invalidateConnection(netActivity.connection());
+		break;
+	case NetworkActivity::Activity::newRequest:
+		mConnectionRepo.lock()->registerNewRequest(netActivity.connection());
+		break;
+	default:
+		throw std::runtime_error(std::format("Unknown activity type {}", static_cast<int>(act)));
+	}
+
 	mActivityBuffer.push_back(netActivity);
 }
 
@@ -17,10 +29,6 @@ std::list<NetworkActivity> Network::Select(unsigned timeout) {
 	if (mActivityBuffer.empty()) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
 	}
-	if (mActivityBuffer.empty()) {
-		return std::list<NetworkActivity>();
-	}
-	std::scoped_lock<std::mutex> guard(mMutex);
 	auto recentActivity = move(mActivityBuffer);
 	return recentActivity;
 }
@@ -38,6 +46,5 @@ void Network::sendReply(int connection, std::shared_ptr<Reply> reply) {
 /// </summary>
 
 bool Network::shouldExit() const {
-	std::scoped_lock<std::mutex> guard(mMutex);
 	return mActivityBuffer.empty();
 }

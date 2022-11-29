@@ -1,12 +1,21 @@
 #include "RequestProcessor.h"
 
-RequestProcessor::RequestProcessor(int threadsCount) : mThreadsNumber(threadsCount) {
-
+RequestProcessor::RequestProcessor(std::weak_ptr<ConnectionRepo> connectionRepo,
+                                   int threadsCount,
+                                   std::string name) : 
+                                   mConnectionRepo(connectionRepo),
+                                   mThreadsNumber(threadsCount),
+                                   mName(name)
+{
 }
-void RequestProcessor::processRequest(NetworkActivity a, std::weak_ptr<INetwork> network) {
+
+void RequestProcessor::processRequest(NetworkActivity a, 
+                                      std::weak_ptr<INetwork> network)
+{
     std::unique_lock<std::mutex> guard(mMutex);
     initialize();
-    mRequests.push(std::make_pair(a, network));
+    auto recipientIdBegin = mConnectionRepo.lock()->getConnection(a.connection()).recipientUuid;
+    mRequests.push({ a, recipientIdBegin, network });
     sRequestAvailableCv.notify_one();
 }
 
@@ -46,7 +55,7 @@ void RequestProcessor::uninitialize() {
 void RequestProcessor::worker() {
     while (mIsRunning)
     {
-        ThreadRepo::instance()->addThread("Request processor", "Awaiting requests");
+        ThreadRepo::instance()->addThread(mName, "Awaiting requests");
         std::unique_lock<std::mutex> guard(mMutex);
         sRequestAvailableCv.wait(guard, [this] { return !mRequests.empty() || !mIsRunning; });
 
@@ -57,10 +66,15 @@ void RequestProcessor::worker() {
         auto task = std::move(mRequests.front());
         mRequests.pop();
         guard.unlock();
-        ThreadRepo::instance()->addThread("Request processor", "Processing connection " + std::to_string(task.first.connection()));
-        std::shared_ptr<Reply> rpl(task.first.request()->process());
-        task.second.lock()->sendReply(task.first.connection(), rpl);
-        ThreadRepo::instance()->addThread("Request processor", "Done with connection " + std::to_string(task.first.connection()));
+        ThreadRepo::instance()->addThread(mName, "Processing connection " + std::to_string(task.activity.connection()));
+        std::shared_ptr<Reply> rpl(task.activity.request()->process());
+        
         guard.lock();
+        if (mConnectionRepo.lock()->verifyConnectionRecipient(task.activity.connection(), task.recipientId)) {
+            task.network.lock()->sendReply(task.activity.connection(), rpl);
+        }
+
+        ThreadRepo::instance()->addThread(mName, "Done with connection " + std::to_string(task.activity.connection()));
+        
     }
 }

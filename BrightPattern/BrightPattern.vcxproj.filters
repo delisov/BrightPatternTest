@@ -54,6 +54,12 @@
     <ClCompile Include="NetworkLogger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkThreadSafe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConnectionRepo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NetworkActivity.h">
@@ -97,6 +103,15 @@
     </ClInclude>
     <ClInclude Include="NetworkLogger.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INetworkInterface.h">
+      <Filter>Header Files\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkThreadSafe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConnectionRepo.h">
+      <Filter>Header Files\repos</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -5,11 +5,15 @@
 #include "NetworkActivity.h"
 #include "Reply.h"
 #include "INetwork.h"
+#include "ConnectionRepo.h"
 
 // network layer
-class Network: public INetwork
+class Network : public INetwork
 {
 public:
+	Network(std::weak_ptr<ConnectionRepo> connectionRepo) : mConnectionRepo(connectionRepo) {
+	}
+
 	/// <summary>
 	/// Put an activity to the buffer
 	/// </summary>
@@ -32,7 +36,6 @@ public:
 
 private:
 	std::list<NetworkActivity> mActivityBuffer;
-
-	mutable std::mutex mMutex;
+	std::weak_ptr<ConnectionRepo> mConnectionRepo;
 };
 

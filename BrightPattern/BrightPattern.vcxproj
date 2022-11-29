@@ -140,12 +140,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ConnectionRepo.cpp" />
     <ClCompile Include="ConsolePrinter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Network.cpp" />
     <ClCompile Include="NetworkActivity.cpp" />
     <ClCompile Include="NetworkLogger.cpp" />
     <ClCompile Include="NetworkLogsRepo.cpp" />
+    <ClCompile Include="NetworkThreadSafe.cpp" />
     <ClCompile Include="Request.cpp" />
     <ClCompile Include="RequestGenerator.cpp" />
     <ClCompile Include="RequestProcessor.cpp" />
@@ -153,14 +155,17 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConnectionRepo.h" />
     <ClInclude Include="ConsolePrinter.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="INetwork.h" />
+    <ClInclude Include="INetworkInterface.h" />
     <ClInclude Include="IPrinterDataSource.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="NetworkActivity.h" />
     <ClInclude Include="NetworkLogger.h" />
     <ClInclude Include="NetworkLogsRepo.h" />
+    <ClInclude Include="NetworkThreadSafe.h" />
     <ClInclude Include="Reply.h" />
     <ClInclude Include="Request.h" />
     <ClInclude Include="RequestGenerator.h" />
