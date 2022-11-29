@@ -11,7 +11,7 @@ std::string NetworkLogsRepo::printData()
     clearOldRecords();
 
     std::stringstream ss;
-    ss << std::format("|{: ^20}|{: ^20}|{: ^16}|{: ^20}|{: ^20}|{: ^20}|{: ^12}|\n",
+    ss << std::format("|{:-^20}|{: ^20}|{: ^16}|{: ^20}|{: ^20}|{: ^20}|{: ^12}|\n",
         "request #",
         "connection id",
         "client ID begin",

@@ -87,7 +87,9 @@ void RequestGenerator::work()
     std::cout << "Starting request generation..." << std::endl;
 
     while (mIsActive && mRequestsGenerated++ < mMaxRequests) {
-        auto activityType = static_cast<Activity>(Utils::getRandomInt(0, 2));
+        std::mt19937_64 eng{ std::random_device{}() };
+        std::discrete_distribution<int> dist{ 45, 10, 45 };
+        auto activityType = static_cast<Activity>(dist(eng));
 
         switch (activityType) {
         case Activity::newRequest:

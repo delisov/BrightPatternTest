@@ -3,7 +3,7 @@
 /// <summary>
 /// A parameter for the Requests Generator
 /// </summary>
-const int MIN_MSEC_WAIT_BETWEEN_REQUESTS = 300;
+const int MIN_MSEC_WAIT_BETWEEN_REQUESTS = 500;
 
 /// <summary>
 /// A parameter for the Requests Generator
@@ -18,7 +18,7 @@ const int REQUESTS_TO_GENERATE = 500;
 /// <summary>
 /// A parameter for the Requests Generator
 /// </summary>
-const int CONNECTION_POOL_SIZE = 30;
+const int CONNECTION_POOL_SIZE = 10;
 
 /// <summary>
 /// A parameter for the main loop, timeout for network select

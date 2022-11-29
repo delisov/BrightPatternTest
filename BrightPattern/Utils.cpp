@@ -16,6 +16,7 @@ int Utils::getRandomInt(int min, int max)
     return dist(eng);
 }
 
+
 long long Utils::timestamp() {
 	const auto now = std::chrono::system_clock::now();
 	return std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();

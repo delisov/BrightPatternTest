@@ -29,6 +29,12 @@ void ConnectionRepo::registerNewRequest(int connection) {
     mConnections.at(connection).openRequests++;
 }
 
+[[maybe_unused]]
+void ConnectionRepo::registerReply(int connection) {
+    std::scoped_lock<std::mutex> guard(mMutex);
+    mConnections.at(connection).openRequests--;
+}
+
 [[nodiscard]]
 ConnectionRepo::ConnectionInfo ConnectionRepo::getConnection(int connection) const {
     std::scoped_lock<std::mutex> guard(mMutex);

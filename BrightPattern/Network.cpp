@@ -38,6 +38,7 @@ std::list<NetworkActivity> Network::Select(unsigned timeout) {
 /// </summary>
 
 void Network::sendReply(int connection, std::shared_ptr<Reply> reply) {
+	mConnectionRepo.lock()->registerReply(connection);
 }
 
 /// <summary>

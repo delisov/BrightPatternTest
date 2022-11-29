@@ -57,7 +57,7 @@ void ConsolePrinter::printWork()
 		}
 
 		clear();
-		std::cout << ss.str();
+		printf("%s", ss.str().c_str());
 	}
 
 	ThreadRepo::instance()->removeThread();

@@ -27,6 +27,8 @@ public:
 
     [[maybe_unused]] void registerNewRequest(int connection);
 
+    [[maybe_unused]] void registerReply(int connection);
+
     [[nodiscard]] ConnectionInfo getConnection(int connection) const;
 
     [[nodiscard]] std::vector<int> listConnections() const;
